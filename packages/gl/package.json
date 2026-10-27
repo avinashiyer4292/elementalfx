@@ -1,0 +1,43 @@
+{
+  "name": "@elementalfx/gl",
+  "version": "0.1.0",
+  "description": "Small WebGL2 toolkit used by elementalfx effects: programs, ping-pong render targets with an 8-bit fallback, texture helpers.",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "keywords": [
+    "webgl",
+    "webgl2",
+    "gpgpu",
+    "shader"
+  ],
+  "homepage": "https://github.com/avinashiyer4292/elementalfx/tree/main/packages/gl#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/avinashiyer4292/elementalfx.git",
+    "directory": "packages/gl"
+  },
+  "bugs": {
+    "url": "https://github.com/avinashiyer4292/elementalfx/issues"
+  },
+  "dependencies": {
+    "@elementalfx/core": "workspace:^"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
