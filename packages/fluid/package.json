@@ -1,0 +1,65 @@
+{
+  "name": "@elementalfx/fluid",
+  "version": "0.1.0",
+  "description": "Interactive WebGL fluid simulation: a smoke or ink cursor trail over your page, a living background behind your content, or splashes on demand.",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": [
+    "./dist/element.js",
+    "./dist/*.global.js"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./element": {
+      "types": "./dist/element.d.ts",
+      "import": "./dist/element.js"
+    },
+    "./global": "./dist/fluid.global.js",
+    "./package.json": "./package.json"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "unpkg": "./dist/fluid.global.js",
+  "jsdelivr": "./dist/fluid.global.js",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "keywords": [
+    "fluid",
+    "simulation",
+    "smoke",
+    "ink",
+    "cursor",
+    "navier-stokes",
+    "webgl",
+    "background",
+    "web-component",
+    "animation"
+  ],
+  "homepage": "https://github.com/avinashiyer4292/elementalfx/tree/main/packages/fluid#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/avinashiyer4292/elementalfx.git",
+    "directory": "packages/fluid"
+  },
+  "bugs": {
+    "url": "https://github.com/avinashiyer4292/elementalfx/issues"
+  },
+  "dependencies": {
+    "@elementalfx/core": "workspace:^",
+    "@elementalfx/gl": "workspace:^"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "elementalfx": {
+    "global": "fluid",
+    "globalEntry": "src/global.ts",
+    "sizeLimit": 12288
+  }
+}
