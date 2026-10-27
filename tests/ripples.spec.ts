@@ -39,6 +39,31 @@ test.describe('ripples', () => {
     expect(await diff(page, original, await shot(target))).toBeLessThan(3);
   });
 
+  test('an explicit source fills the element like object-fit: cover', async ({ page }) => {
+    // Reference: the same image as a CSS background with background-size: cover.
+    await page.evaluate(() => {
+      const w = window as unknown as Win;
+      const box = document.createElement('div');
+      box.className = 'box';
+      box.id = 'target';
+      box.style.cssText = `width:500px;height:240px;background:url(${w.makeImage(640, 480)}) center / cover no-repeat`;
+      document.body.append(box);
+    });
+    const target = page.locator('#target');
+    const reference = await shot(target);
+    await page.evaluate(() => {
+      const w = window as unknown as Win;
+      const box = document.getElementById('target')!;
+      const image = new Image();
+      image.src = w.makeImage(640, 480);
+      box.style.background = 'none';
+      w.fx = w.ElementalFX.ripples.createRipples(box, { source: image });
+      return w.fx.ready;
+    });
+    await frames(page, 3);
+    expect(await diff(page, reference, await shot(target))).toBeLessThan(3);
+  });
+
   test('a drop visibly disturbs the image, and the water settles after the idle timeout', async ({ page }) => {
     await page.evaluate(() => {
       const w = window as unknown as Win;

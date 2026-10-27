@@ -457,7 +457,10 @@ class RipplesEffect implements Ripples {
     canvas.height = Math.max(1, Math.round(height * dpr));
 
     const { width: iw, height: ih } = sourceSize(this.source);
-    if (this.mode === 'background') {
+    if (this.mode === 'background' && this.options.source) {
+      const fit = { objectFit: this.options.fit, objectPosition: '50% 50%' };
+      this.drawRect = objectRect(fit, { x: 0, y: 0, width, height }, iw || width, ih || height);
+    } else if (this.mode === 'background') {
       this.drawRect = backgroundRect(getComputedStyle(el), width, height, iw || width, ih || height);
     } else {
       const style = getComputedStyle(this.media!);

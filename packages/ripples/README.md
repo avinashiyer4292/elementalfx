@@ -58,6 +58,7 @@ The script registers `<fx-ripples>` too.
 | --- | --- | --- |
 | `preset` | `'pond'` | Starting values: `'pond'`, `'rain'` (continuous drops) or `'subtle'` (gentle refraction) |
 | `source` | auto | Image URL or `HTMLImageElement`/`HTMLVideoElement`/`HTMLCanvasElement`/`ImageBitmap`. By default the element's background image, else its first `<img>`/`<video>` |
+| `fit` | `'cover'` | How an explicit `source` fills the element: `'cover'`, `'contain'` or `'fill'` |
 | `resolution` | `256` | Simulation cells along the longer side |
 | `dropRadius` | `20` | Radius in CSS px of pointer drops |
 | `perturbance` | `0.03` | Refraction strength, as a fraction of the element width |

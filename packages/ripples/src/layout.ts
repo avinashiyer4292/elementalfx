@@ -95,7 +95,7 @@ export function backgroundRect(
 
 /** Computes where an `<img>`/`<video>` draws its pixels, following object-fit/object-position. */
 export function objectRect(
-  style: CSSStyleDeclaration,
+  style: Pick<CSSStyleDeclaration, 'objectFit' | 'objectPosition'>,
   box: { x: number; y: number; width: number; height: number },
   imageWidth: number,
   imageHeight: number,

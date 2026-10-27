@@ -8,6 +8,7 @@ export type RipplesElement = EffectElement<Ripples>;
 export const ripplesAttributes = {
   preset: { option: 'preset', type: 'string' },
   src: { option: 'source', type: 'string' },
+  fit: { option: 'fit', type: 'string' },
   resolution: { option: 'resolution', type: 'number' },
   'drop-radius': { option: 'dropRadius', type: 'number' },
   perturbance: { option: 'perturbance', type: 'number' },

@@ -19,6 +19,11 @@ export interface RipplesOptions {
    * first `<img>`/`<video>` inside it, or the element itself if it is one.
    */
   source?: string | ImageSource;
+  /**
+   * How an explicit `source` fills the element, like CSS object-fit. Default
+   * 'cover'. Background images and `<img>`/`<video>` sources follow their own CSS.
+   */
+  fit?: 'cover' | 'contain' | 'fill';
   /** Simulation cells along the longer side. Higher is smoother but slower. Default 256. */
   resolution?: number;
   /** Radius in CSS px of drops made by the pointer. Default 20. */
@@ -65,6 +70,7 @@ export const defaultRain: ResolvedRainOptions = {
 };
 
 const base: Omit<ResolvedRipplesOptions, 'preset' | 'source'> = {
+  fit: 'cover',
   resolution: 256,
   dropRadius: 20,
   perturbance: 0.03,
