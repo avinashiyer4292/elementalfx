@@ -5,6 +5,7 @@ export {
   defineEffectElement,
   parseAttribute,
   attributeToOption,
+  setOptionPath,
   type AttributeType,
   type AttributeSpec,
   type EffectElementSpec,

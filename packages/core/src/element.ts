@@ -4,7 +4,7 @@ import { isBrowser } from './env';
 export type AttributeType = 'number' | 'boolean' | 'string' | 'list' | 'json';
 
 export interface AttributeSpec {
-  /** Option name the attribute maps to, e.g. `drop-radius` → `dropRadius`. */
+  /** Option the attribute maps to, e.g. `dropRadius`. Dotted paths nest: `wind.speed`. */
   option: string;
   type: AttributeType;
 }
@@ -60,6 +60,21 @@ export function attributeToOption(name: string): string {
 }
 
 /**
+ * Writes `value` at an option path into `target`. Dotted paths nest, so
+ * `wind.speed` becomes `{ wind: { speed } }`.
+ */
+export function setOptionPath(target: Record<string, unknown>, path: string, value: unknown): void {
+  const keys = path.split('.');
+  let node = target;
+  for (const key of keys.slice(0, -1)) {
+    const next = node[key];
+    if (typeof next !== 'object' || next === null) node[key] = {};
+    node = node[key] as Record<string, unknown>;
+  }
+  node[keys[keys.length - 1]!] = value;
+}
+
+/**
  * Registers a custom element that creates an effect when connected and
  * destroys it when disconnected. Attribute changes become `set()` calls.
  * Returns the element class, or undefined outside the browser (SSR).
@@ -112,7 +127,9 @@ export function defineEffectElement<I extends ElementControllable>(
       if (!this.instance || previous === next) return;
       const attribute = spec.attributes[name];
       if (!attribute) return;
-      this.instance.set({ [attribute.option]: parseAttribute(next, attribute.type) });
+      const patch: Record<string, unknown> = {};
+      setOptionPath(patch, attribute.option, parseAttribute(next, attribute.type));
+      this.instance.set(patch);
     }
 
     private setup(): void {
@@ -123,7 +140,7 @@ export function defineEffectElement<I extends ElementControllable>(
         if (!this.hasAttribute(name)) continue;
         const attribute = spec.attributes[name]!;
         const value = parseAttribute(this.getAttribute(name), attribute.type);
-        if (value !== undefined) options[attribute.option] = value;
+        if (value !== undefined) setOptionPath(options, attribute.option, value);
       }
       this.instance = spec.create(this, options);
       this.dispatchEvent(new CustomEvent('fx-ready', { detail: this.instance }));
