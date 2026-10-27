@@ -1,0 +1,62 @@
+{
+  "name": "@elementalfx/ripples",
+  "version": "0.1.0",
+  "description": "WebGL water ripples for images, video and CSS backgrounds. A modern, dependency-free replacement for jquery.ripples.",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": [
+    "./dist/element.js",
+    "./dist/*.global.js"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./element": {
+      "types": "./dist/element.d.ts",
+      "import": "./dist/element.js"
+    },
+    "./global": "./dist/ripples.global.js",
+    "./package.json": "./package.json"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "unpkg": "./dist/ripples.global.js",
+  "jsdelivr": "./dist/ripples.global.js",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "keywords": [
+    "ripples",
+    "water",
+    "webgl",
+    "effect",
+    "jquery-ripples",
+    "web-component",
+    "animation"
+  ],
+  "homepage": "https://github.com/avinashiyer4292/elementalfx/tree/main/packages/ripples#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/avinashiyer4292/elementalfx.git",
+    "directory": "packages/ripples"
+  },
+  "bugs": {
+    "url": "https://github.com/avinashiyer4292/elementalfx/issues"
+  },
+  "dependencies": {
+    "@elementalfx/core": "workspace:^",
+    "@elementalfx/gl": "workspace:^"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "elementalfx": {
+    "global": "ripples",
+    "globalEntry": "src/global.ts",
+    "sizeLimit": 11264
+  }
+}
