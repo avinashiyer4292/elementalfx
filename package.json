@@ -1,0 +1,30 @@
+{
+  "name": "elementalfx-monorepo",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.28.0",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "playwright test",
+    "test:ssr": "node --test tests/ssr.test.mjs",
+    "size": "node scripts/size.mjs",
+    "check": "pnpm build && pnpm typecheck && pnpm test:ssr && pnpm test && pnpm size",
+    "changeset": "changeset",
+    "version": "changeset version",
+    "release": "pnpm build && node scripts/publish.mjs",
+    "rename": "node scripts/rename.mjs"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.29.0",
+    "@types/react": "^19.0.0",
+    "esbuild": "^0.28.0",
+    "playwright": "^1.63.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "typescript": "^6.0.0"
+  }
+}

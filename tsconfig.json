@@ -1,0 +1,21 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "paths": {
+      "@elementalfx/core": ["./packages/core/src/index.ts"],
+      "@elementalfx/gl": ["./packages/gl/src/index.ts"],
+      "@elementalfx/ripples": ["./packages/ripples/src/index.ts"],
+      "@elementalfx/ripples/element": ["./packages/ripples/src/element.ts"],
+      "@elementalfx/weather": ["./packages/weather/src/index.ts"],
+      "@elementalfx/weather/element": ["./packages/weather/src/element.ts"],
+      "@elementalfx/fluid": ["./packages/fluid/src/index.ts"],
+      "@elementalfx/fluid/element": ["./packages/fluid/src/element.ts"],
+      "@elementalfx/gravity": ["./packages/gravity/src/index.ts"],
+      "@elementalfx/gravity/element": ["./packages/gravity/src/element.ts"],
+      "@elementalfx/dissolve": ["./packages/dissolve/src/index.ts"],
+      "@elementalfx/dissolve/element": ["./packages/dissolve/src/element.ts"]
+    }
+  },
+  "include": ["packages/*/src/**/*.ts", "packages/*/src/**/*.tsx"]
+}

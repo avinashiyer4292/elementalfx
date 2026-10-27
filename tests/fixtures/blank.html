@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>elementalfx test page</title>
+    <style>
+      body { margin: 0; font: 14px/1.4 system-ui, sans-serif; }
+      .box { width: 400px; height: 300px; }
+    </style>
+    <script>
+      // Count animation frames so tests can tell when effects stop scheduling work.
+      window.__frames = 0;
+      const nativeRaf = window.requestAnimationFrame.bind(window);
+      window.requestAnimationFrame = (callback) => {
+        window.__frames++;
+        return nativeRaf(callback);
+      };
+
+      // A detailed test image: gradient, checkerboard and stripes, so refraction is visible.
+      window.makeImage = (width = 640, height = 480) => {
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        const gradient = ctx.createLinearGradient(0, 0, width, height);
+        gradient.addColorStop(0, '#1d3557');
+        gradient.addColorStop(0.5, '#457b9d');
+        gradient.addColorStop(1, '#f1faee');
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, width, height);
+        ctx.fillStyle = 'rgba(230, 57, 70, 0.75)';
+        const cols = 16;
+        const rows = 12;
+        for (let i = 0; i < cols; i++) {
+          for (let j = 0; j < rows; j++) {
+            if ((i + j) % 2 === 0) ctx.fillRect((i * width) / cols, (j * height) / rows, width / cols, height / rows);
+          }
+        }
+        ctx.strokeStyle = '#fff';
+        ctx.lineWidth = 3;
+        for (let x = 0; x < width; x += 24) {
+          ctx.beginPath();
+          ctx.moveTo(x, 0);
+          ctx.lineTo(x + height / 2, height);
+          ctx.stroke();
+        }
+        return canvas.toDataURL('image/png');
+      };
+
+      // Loads a script and resolves when it has run.
+      window.loadScript = (src) =>
+        new Promise((resolve, reject) => {
+          const script = document.createElement('script');
+          script.src = src;
+          script.onload = resolve;
+          script.onerror = reject;
+          document.head.append(script);
+        });
+
+      // Mean absolute difference (0-255) between two PNG data URLs.
+      window.imageDiff = async (a, b) => {
+        const read = (src) =>
+          new Promise((resolve) => {
+            const image = new Image();
+            image.onload = () => {
+              const canvas = document.createElement('canvas');
+              canvas.width = image.width;
+              canvas.height = image.height;
+              const ctx = canvas.getContext('2d');
+              ctx.drawImage(image, 0, 0);
+              resolve(ctx.getImageData(0, 0, image.width, image.height).data);
+            };
+            image.src = src;
+          });
+        const [x, y] = await Promise.all([read(a), read(b)]);
+        if (x.length !== y.length) return 255;
+        let total = 0;
+        for (let i = 0; i < x.length; i += 4) {
+          total += Math.abs(x[i] - y[i]) + Math.abs(x[i + 1] - y[i + 1]) + Math.abs(x[i + 2] - y[i + 2]);
+        }
+        return total / ((x.length / 4) * 3);
+      };
+
+      window.nextFrames = (count = 2) =>
+        new Promise((resolve) => {
+          const step = () => (count-- <= 0 ? resolve() : nativeRaf(step));
+          nativeRaf(step);
+        });
+    </script>
+  </head>
+  <body></body>
+</html>
