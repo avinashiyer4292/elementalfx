@@ -1,0 +1,41 @@
+{
+  "name": "@elementalfx/core",
+  "version": "0.1.0",
+  "description": "Shared runtime for elementalfx effects: one frame loop, visibility and reduced-motion handling, custom-element helper, noise and a shared wind field.",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "keywords": [
+    "animation",
+    "requestanimationframe",
+    "reduced-motion",
+    "wind",
+    "noise"
+  ],
+  "homepage": "https://github.com/avinashiyer4292/elementalfx/tree/main/packages/core#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/avinashiyer4292/elementalfx.git",
+    "directory": "packages/core"
+  },
+  "bugs": {
+    "url": "https://github.com/avinashiyer4292/elementalfx/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
