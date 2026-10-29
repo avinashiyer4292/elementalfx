@@ -5,12 +5,17 @@
   "license": "MIT",
   "type": "module",
   "sideEffects": [
+    "./dist/element.js",
     "./dist/*.global.js"
   ],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
+    },
+    "./element": {
+      "types": "./dist/element.d.ts",
+      "import": "./dist/element.js"
     },
     "./global": "./dist/gravity.global.js",
     "./package.json": "./package.json"

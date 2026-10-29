@@ -75,6 +75,9 @@ export const defaults: ResolvedGravityOptions = {
 export function resolveOptions(options: GravityOptions, base: ResolvedGravityOptions = defaults): ResolvedGravityOptions {
   const merged: Record<string, unknown> = { ...base };
   for (const [key, value] of Object.entries(options)) if (value !== undefined) merged[key] = value;
+  // Strings straight from HTML attributes, e.g. trigger="idle 30" or split-text="none".
+  if (typeof merged.trigger === 'string') merged.trigger = parseTrigger(merged.trigger);
+  if (merged.splitText !== 'words' && merged.splitText !== 'letters') merged.splitText = false;
   return merged as ResolvedGravityOptions;
 }
 
