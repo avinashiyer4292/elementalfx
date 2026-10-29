@@ -51,6 +51,9 @@ interface Item {
 }
 
 const WALL = 1000;
+// A pile that still fidgets this long after anyone touched it is put to sleep,
+// so the page never animates forever.
+const MAX_RESTLESS = 15; // s
 // Walls sit this far inside the edges, so elements resting a hair into them
 // never poke out and give the page a scrollbar.
 const INSET = 1.5;
@@ -76,6 +79,7 @@ class GravityEffect implements Gravity {
   private scrollX = 0;
   private scrollY = 0;
   private restoreTime = 0;
+  private restless = 0;
   private settleWaiters: (() => void)[] = [];
   private restoreWaiters: (() => void)[] = [];
   private cleanups: (() => void)[] = [];
@@ -125,7 +129,7 @@ class GravityEffect implements Gravity {
     if (this.state === 'restoring') this.resumeFromRestore();
     else if (this.state === 'idle') this.start();
     const settled = new Promise<void>((resolve) => this.settleWaiters.push(resolve));
-    this.runtime?.wake();
+    this.wakeUp();
     return settled;
   }
 
@@ -147,7 +151,7 @@ class GravityEffect implements Gravity {
         item.from = { x: dx, y: dy, angle };
       }
       this.settle();
-      this.runtime?.wake();
+      this.wakeUp();
     }
     return done;
   }
@@ -181,7 +185,7 @@ class GravityEffect implements Gravity {
       body.w += (Math.random() * 2 - 1) * 8 * strength;
       body.wake();
     }
-    this.runtime?.wake();
+    this.wakeUp();
     return settled;
   }
 
@@ -197,7 +201,7 @@ class GravityEffect implements Gravity {
       body.friction = this.options.friction;
       body.wake();
     }
-    this.runtime?.wake();
+    this.wakeUp();
   }
 
   destroy(): void {
@@ -368,7 +372,7 @@ class GravityEffect implements Gravity {
     if (getComputedStyle(item.element).position === 'static') this.style(item, 'position', 'relative');
     this.style(item, 'z-index', '2147483000');
     this.style(item, 'cursor', 'grabbing');
-    this.runtime?.wake();
+    this.wakeUp();
   }
 
   private dragTo(event: PointerEvent): void {
@@ -376,7 +380,7 @@ class GravityEffect implements Gravity {
     if (!drag || event.pointerId !== drag.pointer) return;
     if (Math.abs(event.clientX - drag.x) + Math.abs(event.clientY - drag.y) > 4) drag.moved = true;
     drag.grab.moveTo(event.clientX + window.scrollX, event.clientY + window.scrollY);
-    this.runtime?.wake();
+    this.wakeUp();
   }
 
   private letGo(event: PointerEvent | null): void {
@@ -384,6 +388,7 @@ class GravityEffect implements Gravity {
     if (!drag || (event && event.pointerId !== drag.pointer)) return;
     this.drag = null;
     this.world?.release(drag.grab);
+    this.wakeUp();
     const item = drag.grab.body.data as Item;
     if (this.items.includes(item)) this.style(item, 'cursor', 'grab');
     if (drag.moved) {
@@ -434,12 +439,19 @@ class GravityEffect implements Gravity {
     ];
     for (const wall of this.walls) world.add(wall);
     for (const { body } of this.items) body.wake();
+    this.wakeUp();
+  }
+
+  private wakeUp(): void {
+    this.restless = 0;
     this.runtime?.wake();
   }
 
   private frame(dt: number): void {
     if (this.state === 'falling' && this.world) {
       this.world.step(dt);
+      this.restless += dt;
+      if (this.restless > MAX_RESTLESS && !this.drag) this.world.sleepAll();
       this.render();
       if (this.world.settled && this.canSleep()) {
         this.settle();
