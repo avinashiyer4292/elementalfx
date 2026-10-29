@@ -120,3 +120,17 @@ test('removing a body wakes what rested on it', () => {
   run(world, 1);
   assert.ok(top.y > restY + 40, `top stayed at ${top.y}`);
 });
+
+test('sleepAll stops everything, and waking one body wakes the lot', () => {
+  const world = room();
+  const boxes = stack(world, 4);
+  run(world, 0.2);
+  assert.ok(!world.settled);
+  world.sleepAll();
+  assert.ok(world.settled);
+  const y = boxes[3].y;
+  run(world, 0.5);
+  assert.equal(boxes[3].y, y);
+  boxes[0].wake();
+  assert.ok(boxes.every((box) => !box.sleeping));
+});

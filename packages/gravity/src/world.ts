@@ -125,6 +125,16 @@ export class World {
     }
   }
 
+  /** Put every body to sleep at once, as one island, e.g. to stop a pile that keeps fidgeting. */
+  sleepAll(): void {
+    const island = this.bodies.filter((b) => !b.isStatic && this.grabs.every((g) => g.body !== b));
+    for (const b of island) {
+      b.sleeping = true;
+      b.island = island;
+      b.vx = b.vy = b.w = 0;
+    }
+  }
+
   /** True when every dynamic body is asleep. */
   get settled(): boolean {
     return this.bodies.every((b) => b.isStatic || b.sleeping);
