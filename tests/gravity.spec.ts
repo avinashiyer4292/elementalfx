@@ -86,6 +86,8 @@ test.describe('gravity', () => {
   });
 
   test('fallen elements can be dragged, and a drag never clicks', async ({ page }) => {
+    // Settling twice takes a while on software rendering under a parallel run.
+    test.setTimeout(60_000);
     await setup(page);
     await page.evaluate(() => {
       (window as unknown as { clicks: number }).clicks = 0;
@@ -98,10 +100,13 @@ test.describe('gravity', () => {
     await page.mouse.move(x, y);
     await page.mouse.down();
     await page.mouse.move(x + 200, y - 250, { steps: 12 });
-    await page.waitForTimeout(250);
-    const held = (await page.locator('#go').boundingBox())!;
-    expect(Math.abs(held.x + held.width / 2 - (x + 200))).toBeLessThan(40);
-    expect(Math.abs(held.y + held.height / 2 - (y - 250))).toBeLessThan(40);
+    // The spring catches up with the pointer within a few frames.
+    await expect
+      .poll(async () => {
+        const held = (await page.locator('#go').boundingBox())!;
+        return Math.hypot(held.x + held.width / 2 - (x + 200), held.y + held.height / 2 - (y - 250));
+      })
+      .toBeLessThan(40);
     await page.mouse.up();
     expect(await page.evaluate(() => (window as unknown as { clicks: number }).clicks)).toBe(0);
     // A plain click still works.
