@@ -21,6 +21,12 @@ export interface Gravity {
   restore(): Promise<void>;
   /** Drop if in place, restore if dropped. */
   toggle(): Promise<void>;
+  /**
+   * Blow everything apart from a point in viewport px (like a click's
+   * clientX/clientY; the middle of the target by default). Drops first if
+   * needed. Resolves once everything rests again.
+   */
+  explode(at?: { x: number; y: number }, strength?: number): Promise<void>;
   set(options: GravityOptions): void;
   /** Put everything back at once and stop listening. */
   destroy(): void;
@@ -143,6 +149,35 @@ class GravityEffect implements Gravity {
 
   toggle(): Promise<void> {
     return this.state === 'falling' ? this.restore() : this.drop();
+  }
+
+  explode(at?: { x: number; y: number }, strength = 1): Promise<void> {
+    const settled = this.drop();
+    if (this.state !== 'falling') return settled;
+    let x = at?.x;
+    let y = at?.y;
+    if (x === undefined || y === undefined) {
+      const rect = this.element.getBoundingClientRect();
+      const top = Math.max(0, rect.top);
+      const bottom = Math.min(document.documentElement.clientHeight, rect.bottom);
+      x = (Math.max(0, rect.left) + Math.min(document.documentElement.clientWidth, rect.right)) / 2;
+      y = bottom > top ? (top + bottom) / 2 : rect.top + rect.height / 2;
+    }
+    x += window.scrollX;
+    y += window.scrollY;
+    for (const { body } of this.items) {
+      const dx = body.x - x;
+      const dy = body.y - y;
+      const distance = Math.hypot(dx, dy) || 1;
+      // Closer elements fly harder, and everything gets a little lift.
+      const speed = (strength * 2400) / (1 + distance / 400);
+      body.vx += (dx / distance) * speed;
+      body.vy += (dy / distance) * speed - strength * 300;
+      body.w += (Math.random() * 2 - 1) * 8 * strength;
+      body.wake();
+    }
+    this.runtime?.wake();
+    return settled;
   }
 
   set(options: GravityOptions): void {
