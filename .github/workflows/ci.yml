@@ -22,7 +22,7 @@ jobs:
       - run: pnpm install --no-frozen-lockfile
       - run: pnpm build
       - run: pnpm typecheck
-      - run: pnpm test:ssr
+      - run: pnpm test:node
       - run: pnpm exec playwright install --with-deps chromium
       - run: pnpm test
       - run: pnpm size

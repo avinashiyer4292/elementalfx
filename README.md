@@ -62,7 +62,7 @@ pnpm install
 pnpm build          # ESM + types + <script> bundles for every package
 pnpm typecheck
 pnpm test           # browser tests (run `pnpm exec playwright install chromium` once)
-pnpm test:ssr       # every entry point imports without a DOM
+pnpm test:node      # headless tests: SSR-safe imports, physics engine
 pnpm size           # gzipped size budgets
 node scripts/serve.mjs   # static server on http://localhost:4173 for the demos
 ```
