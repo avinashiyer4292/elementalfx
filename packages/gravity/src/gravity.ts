@@ -45,6 +45,8 @@ interface Item {
   /** The element's own transform, kept underneath ours. */
   base: string;
   saved: Map<string, [string, string]>;
+  /** The style attribute as written, and as the browser reads it, before we touched it. */
+  original: { attribute: string | null; css: string } | null;
   from?: { x: number; y: number; angle: number };
 }
 
@@ -283,7 +285,7 @@ class GravityEffect implements Gravity {
     // Read, then write, then read again, so the page lays out only twice.
     const inline = targets.map((el) => getComputedStyle(el).display === 'inline');
     const items: Item[] = targets.map((el, i) => {
-      const item: Item = { element: el, body: null as unknown as Body, x0: 0, y0: 0, fixed: false, base: '', saved: new Map() };
+      const item: Item = { element: el, body: null as unknown as Body, x0: 0, y0: 0, fixed: false, base: '', saved: new Map(), original: null };
       this.style(item, 'transition', 'none');
       if (inline[i]) this.style(item, 'display', 'inline-block');
       return item;
@@ -331,8 +333,7 @@ class GravityEffect implements Gravity {
     if (options.interactive) {
       for (const item of items) {
         this.style(item, 'touch-action', 'none');
-        this.style(item, 'user-select', 'none');
-        this.style(item, '-webkit-user-select', 'none');
+        this.style(item, ['user-select', '-webkit-user-select'], 'none');
         this.style(item, 'cursor', 'grab');
       }
     }
@@ -489,10 +490,15 @@ class GravityEffect implements Gravity {
   }
 
   /** Sets an inline style, remembering the original value to put back later. */
-  private style(item: Item, property: string, value: string): void {
+  private style(item: Item, properties: string | string[], value: string): void {
     const { style } = item.element;
-    if (!item.saved.has(property)) item.saved.set(property, [style.getPropertyValue(property), style.getPropertyPriority(property)]);
-    style.setProperty(property, value, 'important');
+    const list = typeof properties === 'string' ? [properties] : properties;
+    item.original ??= { attribute: item.element.getAttribute('style'), css: style.cssText };
+    // Remember every name first: prefixed aliases share one value.
+    for (const property of list) {
+      if (!item.saved.has(property)) item.saved.set(property, [style.getPropertyValue(property), style.getPropertyPriority(property)]);
+    }
+    for (const property of list) style.setProperty(property, value, 'important');
   }
 
   /** Physics positions take over from wherever the trip back had got to. */
@@ -518,11 +524,20 @@ class GravityEffect implements Gravity {
     this.letGo(null);
     for (const item of this.items) {
       const { style } = item.element;
-      for (const [property, [value, priority]] of item.saved) {
+      // Newest first, so later changes unwind before earlier ones.
+      for (const [property, [value, priority]] of [...item.saved].reverse()) {
         if (value) style.setProperty(property, value, priority);
         else style.removeProperty(property);
       }
-      if (item.element.getAttribute('style') === '') item.element.removeAttribute('style');
+      // Unless the page changed other inline styles meanwhile, put the attribute back word for word.
+      const { original } = item;
+      if (original && style.cssText === original.css) {
+        // Reading the attribute first makes Chrome write out the pending style
+        // changes now; otherwise it can re-add style="" after we remove it.
+        item.element.getAttribute('style');
+        if (original.attribute === null) item.element.removeAttribute('style');
+        else item.element.setAttribute('style', original.attribute);
+      }
     }
     this.split?.undo();
     this.split = null;
