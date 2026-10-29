@@ -17,8 +17,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: pnpm
-      # Switch to --frozen-lockfile once pnpm-lock.yaml is committed.
+      # Once pnpm-lock.yaml is committed: add `cache: pnpm` above and use --frozen-lockfile.
       - run: pnpm install --no-frozen-lockfile
       - run: pnpm build
       - run: pnpm typecheck
