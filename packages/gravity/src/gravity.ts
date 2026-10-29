@@ -2,6 +2,7 @@ import { EffectRuntime, isBrowser, prefersReducedMotion, resolveElement } from '
 import { Body } from './body';
 import { resolveOptions, type GravityOptions, type ResolvedGravityOptions } from './options';
 import { pickElements, splitText, type SplitResult } from './pick';
+import type { Grab } from './grab';
 import { World } from './world';
 
 export type GravityState = 'idle' | 'falling' | 'restoring';
@@ -68,6 +69,8 @@ class GravityEffect implements Gravity {
   private restoreWaiters: (() => void)[] = [];
   private cleanups: (() => void)[] = [];
   private destroyed = false;
+  private byElement = new WeakMap<Element, Item>();
+  private drag: { grab: Grab; pointer: number; x: number; y: number; moved: boolean } | null = null;
 
   constructor(
     readonly element: HTMLElement,
@@ -88,6 +91,14 @@ class GravityEffect implements Gravity {
     this.listen(window, 'resize', () => this.fitWalls());
     // Elements inside position: fixed move with the viewport, so keep them in step.
     this.listen(window, 'scroll', () => this.renderFixed(), { passive: true });
+    this.listen(this.element, 'pointerdown', (event: PointerEvent) => this.grabAt(event));
+    this.listen(window, 'pointermove', (event: PointerEvent) => this.dragTo(event));
+    this.listen(window, 'pointerup', (event: PointerEvent) => this.letGo(event));
+    this.listen(window, 'pointercancel', (event: PointerEvent) => this.letGo(event));
+    // No native image or link dragging, and no text selection, while things are loose.
+    this.listen(this.element, 'dragstart', (event: Event) => {
+      if (this.state !== 'idle') event.preventDefault();
+    });
   }
 
   get bodies(): number {
@@ -111,6 +122,7 @@ class GravityEffect implements Gravity {
         this.reset();
         return done;
       }
+      this.letGo(null);
       this.state = 'restoring';
       this.restoreTime = 0;
       for (const item of this.items) {
@@ -219,8 +231,69 @@ class GravityEffect implements Gravity {
       this.style(item, 'transform-origin', '50% 50%');
       this.style(item, 'transform', item.base.trim() || 'none');
     }
+    if (options.interactive) {
+      for (const item of items) {
+        this.style(item, 'touch-action', 'none');
+        this.style(item, 'user-select', 'none');
+        this.style(item, '-webkit-user-select', 'none');
+        this.style(item, 'cursor', 'grab');
+      }
+    }
+    for (const item of items) this.byElement.set(item.element, item);
     this.items = items;
     this.state = 'falling';
+  }
+
+  /** The fallen element under a pointer, if any. */
+  private itemAt(target: EventTarget | null): Item | null {
+    for (let node = target instanceof Element ? target : null; node && node !== this.element.parentElement; node = node.parentElement) {
+      const item = this.byElement.get(node);
+      if (item) return item;
+    }
+    return null;
+  }
+
+  private grabAt(event: PointerEvent): void {
+    if (this.state !== 'falling' || !this.options.interactive || !this.world || this.drag) return;
+    if (event.pointerType === 'mouse' && event.button !== 0) return;
+    const item = this.itemAt(event.target);
+    if (!item) return;
+    event.preventDefault();
+    const x = event.clientX + window.scrollX;
+    const y = event.clientY + window.scrollY;
+    const grab = this.world.grab(item.body, x, y);
+    this.drag = { grab, pointer: event.pointerId, x: event.clientX, y: event.clientY, moved: false };
+    // The dragged element goes on top and stays there.
+    if (getComputedStyle(item.element).position === 'static') this.style(item, 'position', 'relative');
+    this.style(item, 'z-index', '2147483000');
+    this.style(item, 'cursor', 'grabbing');
+    this.runtime?.wake();
+  }
+
+  private dragTo(event: PointerEvent): void {
+    const drag = this.drag;
+    if (!drag || event.pointerId !== drag.pointer) return;
+    if (Math.abs(event.clientX - drag.x) + Math.abs(event.clientY - drag.y) > 4) drag.moved = true;
+    drag.grab.moveTo(event.clientX + window.scrollX, event.clientY + window.scrollY);
+    this.runtime?.wake();
+  }
+
+  private letGo(event: PointerEvent | null): void {
+    const drag = this.drag;
+    if (!drag || (event && event.pointerId !== drag.pointer)) return;
+    this.drag = null;
+    this.world?.release(drag.grab);
+    const item = drag.grab.body.data as Item;
+    if (this.items.includes(item)) this.style(item, 'cursor', 'grab');
+    if (drag.moved) {
+      // A drag that ends over a link or button shouldn't also click it.
+      const swallow = (click: Event): void => {
+        click.preventDefault();
+        click.stopPropagation();
+      };
+      window.addEventListener('click', swallow, { capture: true, once: true });
+      setTimeout(() => window.removeEventListener('click', swallow, { capture: true }), 0);
+    }
   }
 
   /** The area elements fall within, in document px. */
@@ -283,7 +356,7 @@ class GravityEffect implements Gravity {
 
   /** Whether nothing outside the physics (a drag, say) needs frames. */
   private canSleep(): boolean {
-    return true;
+    return this.drag === null;
   }
 
   private offset(item: Item): [number, number] {
@@ -345,6 +418,7 @@ class GravityEffect implements Gravity {
 
   /** Puts every element back exactly as it was. */
   private reset(): void {
+    this.letGo(null);
     for (const item of this.items) {
       const { style } = item.element;
       for (const [property, [value, priority]] of item.saved) {
@@ -355,6 +429,7 @@ class GravityEffect implements Gravity {
     }
     this.split?.undo();
     this.split = null;
+    this.byElement = new WeakMap();
     this.items = [];
     this.walls = [];
     this.world = null;
