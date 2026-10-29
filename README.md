@@ -7,7 +7,7 @@ Natural-element effects for the web: water, air, fire and earth. Each effect is 
 | [`@elementalfx/ripples`](packages/ripples) | WebGL water ripples on images, video and CSS backgrounds; a modern replacement for jquery.ripples | ready |
 | [`@elementalfx/weather`](packages/weather) | Rain, snow, fog, lightning, leaves and embers driven by one shared wind field; snow settles on your elements | ready |
 | [`@elementalfx/fluid`](packages/fluid) | Smoke and ink fluid simulation for cursor trails, living backgrounds and splashes | ready |
-| `@elementalfx/gravity` | Page elements fall, collide and get thrown around, then snap back | planned |
+| [`@elementalfx/gravity`](packages/gravity) | Page elements fall, collide and get thrown around, then fly back into place | ready |
 | `@elementalfx/dissolve` | Elements disintegrate, burn or melt away, or assemble in reverse | planned |
 | [`@elementalfx/core`](packages/core), [`@elementalfx/gl`](packages/gl) | Shared runtime and WebGL toolkit used by the effects | ready |
 
