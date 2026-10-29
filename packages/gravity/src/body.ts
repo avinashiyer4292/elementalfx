@@ -35,6 +35,10 @@ export class Body {
   restitution: number;
   sleeping = false;
   sleepTime = 0;
+  /** @internal The bodies that fell asleep together with this one; they wake together too. */
+  island: Body[] | null = null;
+  /** @internal Union-find parent while grouping bodies into islands. */
+  root: Body = this;
   /** Arbitrary data, e.g. the DOM element this body moves. */
   data: unknown = null;
 
@@ -68,9 +72,16 @@ export class Body {
     return this.invMass === 0;
   }
 
+  /** Wake this body and everything that fell asleep in contact with it. */
   wake(): void {
-    this.sleeping = false;
     this.sleepTime = 0;
+    if (!this.sleeping) return;
+    const island = this.island ?? [this];
+    for (const body of island) {
+      body.sleeping = false;
+      body.sleepTime = 0;
+      body.island = null;
+    }
   }
 
   /** Axis-aligned bounds: [minX, minY, maxX, maxY]. */

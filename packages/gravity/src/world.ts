@@ -53,7 +53,8 @@ const ALLOWED_PENETRATION = 0.75;
 const BIAS_FACTOR = 0.2;
 // Only real impacts bounce; resting contacts don't.
 const RESTITUTION_THRESHOLD = 60; // px/s
-// A body sleeps once every point on it has moved slower than this for SLEEP_TIME.
+// Bodies touching each other sleep as a group (an island) once every point on
+// every one of them has moved slower than this for SLEEP_TIME.
 const SLEEP_SPEED = 6; // px/s
 const SLEEP_TIME = 0.5; // s
 // Longest stretch simulated per call, so a stalled tab doesn't spiral.
@@ -180,8 +181,47 @@ export class World {
       const edge = Math.abs(b.w) * Math.hypot(b.hw, b.hh);
       const still = Math.hypot(b.vx, b.vy) + edge < SLEEP_SPEED;
       b.sleepTime = still ? b.sleepTime + dt : 0;
-      if (b.sleepTime > SLEEP_TIME) {
+    }
+    // A held body never sleeps.
+    for (const grab of this.grabs) grab.body.sleepTime = 0;
+    this.sleepIslands();
+  }
+
+  /**
+   * Groups awake bodies that touch into islands and puts an island to sleep
+   * once all of it has been still for SLEEP_TIME. A body resting on another
+   * can't sleep alone, so nothing is ever pinned under a sleeping neighbour.
+   */
+  private sleepIslands(): void {
+    const find = (body: Body): Body => {
+      while (body.root !== body) {
+        body.root = body.root.root;
+        body = body.root;
+      }
+      return body;
+    };
+    const awake = this.bodies.filter((b) => !b.isStatic && !b.sleeping);
+    for (const b of awake) b.root = b;
+    for (const { a, b } of this.arbiters.values()) {
+      if (a.isStatic || b.isStatic || a.sleeping || b.sleeping) continue;
+      const ra = find(a);
+      const rb = find(b);
+      if (ra !== rb) ra.root = rb;
+    }
+    const islands = new Map<Body, Body[]>();
+    const restless = new Set<Body>();
+    for (const b of awake) {
+      const root = find(b);
+      let island = islands.get(root);
+      if (!island) islands.set(root, (island = []));
+      island.push(b);
+      if (b.sleepTime < SLEEP_TIME) restless.add(root);
+    }
+    for (const [root, island] of islands) {
+      if (restless.has(root)) continue;
+      for (const b of island) {
         b.sleeping = true;
+        b.island = island;
         b.vx = b.vy = b.w = 0;
       }
     }
@@ -203,12 +243,11 @@ export class World {
         if ((a.isStatic || a.sleeping) && (b.isStatic || b.sleeping)) continue;
         if (a.id > b.id) [a, b] = [b, a];
         const key = `${a.id}:${b.id}`;
-        // An awake body moving fast enough wakes what it hits.
-        const moving = (body: Body): boolean => !body.isStatic && !body.sleeping && body.vx * body.vx + body.vy * body.vy > 900;
-        if (a.sleeping && moving(b)) a.wake();
-        if (b.sleeping && moving(a)) b.wake();
         const contacts = collide(a, b);
         if (contacts.length === 0) continue;
+        // Touching an awake body wakes a sleeping one, and its whole island.
+        if (a.sleeping && !b.isStatic) a.wake();
+        if (b.sleeping && !a.isStatic) b.wake();
         seen.add(key);
         let arbiter = this.arbiters.get(key);
         if (!arbiter) {
