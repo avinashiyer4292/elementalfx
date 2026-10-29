@@ -8,6 +8,7 @@
 
 import type { Body } from './body';
 import { collide, type Contact } from './collide';
+import { Grab } from './grab';
 
 class Arbiter {
   contacts: Contact[] = [];
@@ -66,6 +67,7 @@ export class World {
   iterations: number;
   rate: number;
   private arbiters = new Map<string, Arbiter>();
+  private grabs: Grab[] = [];
   private pending = 0;
 
   constructor(options: WorldOptions = {}) {
@@ -81,6 +83,7 @@ export class World {
 
   remove(body: Body): void {
     this.bodies = this.bodies.filter((b) => b !== body);
+    this.grabs = this.grabs.filter((g) => g.body !== body);
     // Whatever rested on it has to fall now.
     this.wakeTouching(body);
     for (const [key, arbiter] of this.arbiters) {
@@ -90,7 +93,21 @@ export class World {
 
   clear(): void {
     this.bodies = [];
+    this.grabs = [];
     this.arbiters.clear();
+  }
+
+  /** Start dragging `body` by the world point (x, y). Move it with `grab.moveTo`. */
+  grab(body: Body, x: number, y: number): Grab {
+    const grab = new Grab(body, x, y);
+    this.grabs.push(grab);
+    this.wakeTouching(body);
+    body.wake();
+    return grab;
+  }
+
+  release(grab: Grab): void {
+    this.grabs = this.grabs.filter((g) => g !== grab);
   }
 
   /**
@@ -144,7 +161,9 @@ export class World {
     // Measure approach speeds for every contact before any warm starting changes them.
     for (const arbiter of this.arbiters.values()) this.preStep(arbiter, invDt);
     for (const arbiter of this.arbiters.values()) this.warmStart(arbiter);
+    for (const grab of this.grabs) grab.prepare(dt);
     for (let i = 0; i < this.iterations; i++) {
+      for (const grab of this.grabs) grab.solve();
       for (const arbiter of this.arbiters.values()) this.applyImpulses(arbiter);
     }
 
