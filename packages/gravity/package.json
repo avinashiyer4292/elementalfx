@@ -1,0 +1,58 @@
+{
+  "name": "@elementalfx/gravity",
+  "version": "0.1.0",
+  "description": "Gravity mode for any web page: elements fall, collide, tumble and can be thrown around, then spring back into place. Zero dependencies.",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": [
+    "./dist/*.global.js"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./global": "./dist/gravity.global.js",
+    "./package.json": "./package.json"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "unpkg": "./dist/gravity.global.js",
+  "jsdelivr": "./dist/gravity.global.js",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "keywords": [
+    "gravity",
+    "physics",
+    "dom",
+    "rigid-body",
+    "easter-egg",
+    "404",
+    "google-gravity",
+    "animation",
+    "web-component"
+  ],
+  "homepage": "https://github.com/avinashiyer4292/elementalfx/tree/main/packages/gravity#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/avinashiyer4292/elementalfx.git",
+    "directory": "packages/gravity"
+  },
+  "bugs": {
+    "url": "https://github.com/avinashiyer4292/elementalfx/issues"
+  },
+  "dependencies": {
+    "@elementalfx/core": "workspace:^"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "elementalfx": {
+    "global": "gravity",
+    "globalEntry": "src/global.ts",
+    "sizeLimit": 12288
+  }
+}
