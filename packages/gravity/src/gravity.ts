@@ -99,6 +99,10 @@ class GravityEffect implements Gravity {
     this.listen(this.element, 'dragstart', (event: Event) => {
       if (this.state !== 'idle') event.preventDefault();
     });
+    this.listen(window, 'keydown', (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && this.options.restoreOnEscape && this.state !== 'idle') void this.restore();
+    });
+    this.armTrigger();
   }
 
   get bodies(): number {
@@ -142,8 +146,10 @@ class GravityEffect implements Gravity {
   }
 
   set(options: GravityOptions): void {
+    const trigger = this.options.trigger;
     this.options = resolveOptions(options, this.options);
     this.runtime?.setRespectReducedMotion(this.options.respectReducedMotion);
+    if (isBrowser && this.options.trigger !== trigger) this.armTrigger();
     if (!this.world) return;
     this.world.gravity = this.options.gravity;
     for (const { body } of this.items) {
@@ -158,9 +164,65 @@ class GravityEffect implements Gravity {
     if (this.destroyed) return;
     this.destroyed = true;
     this.reset();
+    this.disarm();
     for (const cleanup of this.cleanups) cleanup();
     this.cleanups = [];
     this.runtime?.destroy();
+  }
+
+  private disarm: () => void = () => {};
+
+  /** Sets up whatever makes the page fall by itself: load, the Konami code, idleness or a click. */
+  private armTrigger(): void {
+    this.disarm();
+    const stops: (() => void)[] = [];
+    this.disarm = () => {
+      for (const stop of stops) stop();
+      this.disarm = () => {};
+    };
+    const on = <E extends Event>(target: EventTarget, type: string, handler: (event: E) => void): void => {
+      const listener = handler as EventListener;
+      target.addEventListener(type, listener, { passive: true });
+      stops.push(() => target.removeEventListener(type, listener));
+    };
+    const trigger = this.options.trigger;
+
+    if (trigger === 'load') {
+      // Wait for images and fonts so everything is measured at its real size.
+      const go = (): void => {
+        const frame = requestAnimationFrame(() => void this.drop());
+        stops.push(() => cancelAnimationFrame(frame));
+      };
+      if (document.readyState === 'complete') go();
+      else on(window, 'load', go);
+    } else if (trigger === 'konami') {
+      const code = ['arrowup', 'arrowup', 'arrowdown', 'arrowdown', 'arrowleft', 'arrowright', 'arrowleft', 'arrowright', 'b', 'a'];
+      let progress = 0;
+      on(window, 'keydown', (event: KeyboardEvent) => {
+        const key = event.key.toLowerCase();
+        progress = key === code[progress] ? progress + 1 : key === code[0] ? 1 : 0;
+        if (progress === code.length) {
+          progress = 0;
+          void this.toggle();
+        }
+      });
+    } else if (typeof trigger === 'object' && 'idle' in trigger) {
+      let timer = 0;
+      const restart = (): void => {
+        clearTimeout(timer);
+        if (this.state === 'idle') timer = window.setTimeout(() => void this.drop(), trigger.idle * 1000);
+      };
+      for (const type of ['pointermove', 'pointerdown', 'keydown', 'wheel', 'scroll', 'touchstart']) on(window, type, restart);
+      stops.push(() => clearTimeout(timer));
+      restart();
+    } else if (typeof trigger === 'object' && 'click' in trigger) {
+      on(document, 'click', (event: MouseEvent) => {
+        const target = event.target instanceof Element ? event.target : null;
+        if (!target || event.defaultPrevented) return;
+        const hit = typeof trigger.click === 'string' ? target.closest(trigger.click) : trigger.click.contains(target);
+        if (hit) void this.toggle();
+      });
+    }
   }
 
   private reduced(): boolean {
