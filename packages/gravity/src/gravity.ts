@@ -51,6 +51,9 @@ interface Item {
 }
 
 const WALL = 1000;
+// Walls sit this far inside the edges, so elements resting a hair into them
+// never poke out and give the page a scrollbar.
+const INSET = 1.5;
 
 /**
  * Makes the contents of `target` (the whole page by default) fall, tumble and
@@ -418,7 +421,11 @@ class GravityEffect implements Gravity {
     const world = this.world;
     if (!world || this.state === 'restoring') return;
     for (const wall of this.walls) world.remove(wall);
-    const { left, right, bottom, width } = this.room();
+    let { left, right, bottom, width } = this.room();
+    left += INSET;
+    right -= INSET;
+    bottom -= INSET;
+    width -= INSET * 2;
     const tall = 20000;
     this.walls = [
       new Body({ x: (left + right) / 2, y: bottom + WALL / 2, width: width + WALL * 2, height: WALL, density: 0 }),
