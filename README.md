@@ -8,7 +8,7 @@ Natural-element effects for the web: water, air, fire and earth. Each effect is 
 | [`@elementalfx/weather`](packages/weather) | Rain, snow, fog, lightning, leaves and embers driven by one shared wind field; snow settles on your elements | ready |
 | [`@elementalfx/fluid`](packages/fluid) | Smoke and ink fluid simulation for cursor trails, living backgrounds and splashes | ready |
 | [`@elementalfx/gravity`](packages/gravity) | Page elements fall, collide and get thrown around, then fly back into place | ready |
-| `@elementalfx/dissolve` | Elements disintegrate, burn or melt away, or assemble in reverse | planned |
+| [`@elementalfx/dissolve`](packages/dissolve) | Elements crumble into dust, burn or melt away, and assemble again in reverse | ready |
 | [`@elementalfx/core`](packages/core), [`@elementalfx/gl`](packages/gl) | Shared runtime and WebGL toolkit used by the effects | ready |
 
 ## Quick start
