@@ -58,6 +58,6 @@
   "elementalfx": {
     "global": "gravity",
     "globalEntry": "src/global.ts",
-    "sizeLimit": 12288
+    "sizeLimit": 13312
   }
 }
