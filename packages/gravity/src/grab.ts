@@ -70,7 +70,8 @@ export class Grab {
     this.m22 = inv * k11;
     this.cx = (b.x + this.rx - this.targetX) * beta;
     this.cy = (b.y + this.ry - this.targetY) * beta;
-    this.maxImpulse = b.mass * 40000 * dt;
+    // Strong enough to pull a body out from under a pile of others.
+    this.maxImpulse = b.mass * 2e5 * dt;
     // Damp spin a little so a held body settles under the pointer.
     b.w *= 0.98;
     this.apply(this.ix, this.iy);
