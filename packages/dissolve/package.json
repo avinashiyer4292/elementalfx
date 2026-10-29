@@ -1,0 +1,59 @@
+{
+  "name": "@elementalfx/dissolve",
+  "version": "0.1.0",
+  "description": "Make any element crumble into dust, burn away or melt, and bring it back the same way. Works on text, images and video with no snapshot of the page needed. Zero dependencies.",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": [
+    "./dist/*.global.js"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./global": "./dist/dissolve.global.js",
+    "./package.json": "./package.json"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "unpkg": "./dist/dissolve.global.js",
+  "jsdelivr": "./dist/dissolve.global.js",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "keywords": [
+    "dissolve",
+    "disintegrate",
+    "thanos",
+    "dust",
+    "burn",
+    "melt",
+    "particles",
+    "svg-filter",
+    "transition",
+    "animation"
+  ],
+  "homepage": "https://github.com/avinashiyer4292/elementalfx/tree/main/packages/dissolve#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/avinashiyer4292/elementalfx.git",
+    "directory": "packages/dissolve"
+  },
+  "bugs": {
+    "url": "https://github.com/avinashiyer4292/elementalfx/issues"
+  },
+  "dependencies": {
+    "@elementalfx/core": "workspace:^"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "elementalfx": {
+    "global": "dissolve",
+    "globalEntry": "src/global.ts",
+    "sizeLimit": 10240
+  }
+}
