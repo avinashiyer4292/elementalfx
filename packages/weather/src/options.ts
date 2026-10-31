@@ -81,6 +81,11 @@ export interface WeatherOptions {
   settleOn?: string | Element[] | null;
   /** Tallest snow cap in CSS px. Default 14. */
   maxSnowDepth?: number;
+  /**
+   * How fast landed snow piles up, as a multiple of what really lands.
+   * Raise it to cover a banner's headline in seconds rather than minutes. Default 1.
+   */
+  settleSpeed?: number;
   /** Rain landing on these targets makes them ripple. */
   ripples?: DropTarget[];
   /** 'front' draws over the element's content (default); 'back' draws behind it. */
@@ -112,6 +117,7 @@ export interface ResolvedWeatherOptions {
   lightning: Required<LightningOptions>;
   settleOn: string | Element[] | null;
   maxSnowDepth: number;
+  settleSpeed: number;
   ripples: DropTarget[];
   layer: 'front' | 'back';
   zIndex: number;
@@ -141,6 +147,7 @@ const defaults: ResolvedWeatherOptions = {
   lightning: { rate: 4, flash: 0.35, color: '#e9f0ff' },
   settleOn: null,
   maxSnowDepth: 14,
+  settleSpeed: 1,
   ripples: [],
   layer: 'front',
   zIndex: 2147483000,

@@ -108,7 +108,7 @@ class WeatherEffectImpl implements Weather {
       wind: this.wind,
       random: this.random,
       hitSurface: (x, prevY, y) => this.surfaces.hit(x, prevY, y),
-      deposit: (x, y, amount) => this.surfaces.deposit(x, y, amount, this.options.maxSnowDepth),
+      deposit: (x, y, amount) => this.surfaces.deposit(x, y, amount * Math.max(0, this.options.settleSpeed), this.options.maxSnowDepth),
       splash: (x, y, strength) => this.onSplash(x, y, strength),
     };
     if (!isBrowser) {

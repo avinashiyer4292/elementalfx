@@ -15,6 +15,7 @@ export const weatherAttributes = {
   'wind-turbulence': { option: 'wind.turbulence', type: 'number' },
   'settle-on': { option: 'settleOn', type: 'string' },
   'max-snow-depth': { option: 'maxSnowDepth', type: 'number' },
+  'settle-speed': { option: 'settleSpeed', type: 'number' },
   'lightning-rate': { option: 'lightning.rate', type: 'number' },
   'fog-density': { option: 'fog.density', type: 'number' },
   layer: { option: 'layer', type: 'string' },

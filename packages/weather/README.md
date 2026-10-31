@@ -46,7 +46,7 @@ import '@elementalfx/weather/element';
 </section>
 ```
 
-Attributes: `page`, `preset`, `effects`, `intensity`, `wind-direction`, `wind-speed`, `wind-gusts`, `wind-turbulence`, `settle-on`, `max-snow-depth`, `lightning-rate`, `fog-density`, `layer`, `seed`.
+Attributes: `page`, `preset`, `effects`, `intensity`, `wind-direction`, `wind-speed`, `wind-gusts`, `wind-turbulence`, `settle-on`, `max-snow-depth`, `settle-speed`, `lightning-rate`, `fog-density`, `layer`, `seed`.
 
 ### Script tag
 
@@ -100,6 +100,7 @@ createWeather(document.body, { preset: 'rain', ripples: [lake] });
 | `lightning` | `{ rate: 4, flash: 0.35, color }` | Average strikes per minute and flash brightness |
 | `settleOn` | none | Selector or elements whose top edges collect snow and splash rain (up to 32) |
 | `maxSnowDepth` | `14` | Tallest snow cap in CSS px |
+| `settleSpeed` | `1` | How fast landed snow piles up, as a multiple of what really lands; raise it to cover a headline in seconds |
 | `ripples` | `[]` | Drop targets rain makes ripple |
 | `layer` | `'front'` | `'back'` draws behind the element's content |
 | `zIndex` | `2147483000` | z-index of the page overlay |
