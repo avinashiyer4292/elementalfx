@@ -10,6 +10,10 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
+    "./ripples": {
+      "types": "./dist/ripples.d.ts",
+      "import": "./dist/ripples.js"
+    },
     "./package.json": "./package.json"
   },
   "main": "./dist/index.js",
