@@ -67,8 +67,6 @@ pnpm size           # gzipped size budgets
 node scripts/serve.mjs   # static server on http://localhost:4173 for the demos
 ```
 
-Commit `pnpm-lock.yaml` after the first `pnpm install`, then switch CI to `--frozen-lockfile`.
-
 ## Releasing
 
 Versioning uses [Changesets](https://github.com/changesets/changesets): add one with `pnpm changeset` in each pull request that changes a package.
