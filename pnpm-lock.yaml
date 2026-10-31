@@ -59,6 +59,28 @@ importers:
         specifier: workspace:^
         version: link:../core
 
+  packages/react:
+    dependencies:
+      react:
+        specifier: '>=18'
+        version: 19.3.1
+    devDependencies:
+      '@elementalfx/dissolve':
+        specifier: workspace:^
+        version: link:../dissolve
+      '@elementalfx/fluid':
+        specifier: workspace:^
+        version: link:../fluid
+      '@elementalfx/gravity':
+        specifier: workspace:^
+        version: link:../gravity
+      '@elementalfx/ripples':
+        specifier: workspace:^
+        version: link:../ripples
+      '@elementalfx/weather':
+        specifier: workspace:^
+        version: link:../weather
+
   packages/ripples:
     dependencies:
       '@elementalfx/core':

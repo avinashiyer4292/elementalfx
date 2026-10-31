@@ -1,0 +1,79 @@
+{
+  "name": "@elementalfx/react",
+  "version": "0.1.0",
+  "description": "React components and hooks for every elementalfx effect: <Ripples>, <Weather>, <Fluid>, <Gravity> and <Dissolve>.",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "keywords": [
+    "react",
+    "react-component",
+    "hooks",
+    "ripples",
+    "weather",
+    "snow",
+    "fluid",
+    "gravity",
+    "dissolve",
+    "animation",
+    "effects"
+  ],
+  "homepage": "https://github.com/avinashiyer4292/elementalfx/tree/main/packages/react#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/avinashiyer4292/elementalfx.git",
+    "directory": "packages/react"
+  },
+  "bugs": {
+    "url": "https://github.com/avinashiyer4292/elementalfx/issues"
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "@elementalfx/ripples": "workspace:^",
+    "@elementalfx/weather": "workspace:^",
+    "@elementalfx/fluid": "workspace:^",
+    "@elementalfx/gravity": "workspace:^",
+    "@elementalfx/dissolve": "workspace:^"
+  },
+  "peerDependenciesMeta": {
+    "@elementalfx/ripples": {
+      "optional": true
+    },
+    "@elementalfx/weather": {
+      "optional": true
+    },
+    "@elementalfx/fluid": {
+      "optional": true
+    },
+    "@elementalfx/gravity": {
+      "optional": true
+    },
+    "@elementalfx/dissolve": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@elementalfx/ripples": "workspace:^",
+    "@elementalfx/weather": "workspace:^",
+    "@elementalfx/fluid": "workspace:^",
+    "@elementalfx/gravity": "workspace:^",
+    "@elementalfx/dissolve": "workspace:^"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
