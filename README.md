@@ -9,6 +9,7 @@ Natural-element effects for the web: water, air, fire and earth. Each effect is 
 | [`@elementalfx/fluid`](packages/fluid) | Smoke and ink fluid simulation for cursor trails, living backgrounds and splashes | ready |
 | [`@elementalfx/gravity`](packages/gravity) | Page elements fall, collide and get thrown around, then fly back into place | ready |
 | [`@elementalfx/dissolve`](packages/dissolve) | Elements crumble into dust, burn or melt away, and assemble again in reverse | ready |
+| [`@elementalfx/react`](packages/react) | React components and hooks for every effect | ready |
 | [`@elementalfx/core`](packages/core), [`@elementalfx/gl`](packages/gl) | Shared runtime and WebGL toolkit used by the effects | ready |
 
 ## Quick start
@@ -49,8 +50,11 @@ packages/
   ripples/    @elementalfx/ripples
   weather/    @elementalfx/weather
   fluid/      @elementalfx/fluid
+  gravity/    @elementalfx/gravity, with its own rigid-body physics engine
+  dissolve/   @elementalfx/dissolve
+  react/      @elementalfx/react: components and hooks for every effect
 scripts/      build, size budget, release and rename scripts
-tests/        Playwright browser tests and an SSR import test
+tests/        Playwright browser tests, plus headless tests (SSR, physics)
 ```
 
 ## Development
