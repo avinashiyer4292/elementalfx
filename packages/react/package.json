@@ -26,6 +26,10 @@
       "types": "./dist/gravity.d.ts",
       "import": "./dist/gravity.js"
     },
+    "./dissolve": {
+      "types": "./dist/dissolve.d.ts",
+      "import": "./dist/dissolve.js"
+    },
     "./package.json": "./package.json"
   },
   "main": "./dist/index.js",
