@@ -22,6 +22,10 @@
       "types": "./dist/fluid.d.ts",
       "import": "./dist/fluid.js"
     },
+    "./gravity": {
+      "types": "./dist/gravity.d.ts",
+      "import": "./dist/gravity.js"
+    },
     "./package.json": "./package.json"
   },
   "main": "./dist/index.js",
