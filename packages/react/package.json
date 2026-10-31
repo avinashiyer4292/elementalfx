@@ -14,6 +14,10 @@
       "types": "./dist/ripples.d.ts",
       "import": "./dist/ripples.js"
     },
+    "./weather": {
+      "types": "./dist/weather.d.ts",
+      "import": "./dist/weather.js"
+    },
     "./package.json": "./package.json"
   },
   "main": "./dist/index.js",
