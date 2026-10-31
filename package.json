@@ -12,6 +12,7 @@
     "test": "playwright test",
     "test:node": "node --test tests/*.test.mjs",
     "size": "node scripts/size.mjs",
+    "site": "node scripts/site.mjs",
     "check": "pnpm build && pnpm typecheck && pnpm test:node && pnpm test && pnpm size",
     "changeset": "changeset",
     "version": "changeset version",
