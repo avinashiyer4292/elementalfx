@@ -132,6 +132,18 @@ test.describe('dissolve', () => {
     expect(state).toEqual({ style, visibility: 'visible', dissolved: false });
   });
 
+  test('duration 0 hides and shows at once', async ({ page }) => {
+    const states = await page.evaluate(() => {
+      const D = (window as unknown as Win).ElementalFX.dissolve;
+      const card = document.getElementById('card')!;
+      void D.dissolve(card, { duration: 0 });
+      const hidden = getComputedStyle(card).visibility;
+      void D.assemble(card, { duration: 0 });
+      return [hidden, getComputedStyle(card).visibility, card.getAttribute('style')?.includes('visibility'), document.querySelectorAll('filter').length];
+    });
+    expect(states).toEqual(['hidden', 'visible', false, 0]);
+  });
+
   test("after: 'remove' takes the element out of the page", async ({ page }) => {
     await call(page, "D.dissolve('#red', { duration: 0.3, after: 'remove' })");
     await finished(page);

@@ -47,7 +47,7 @@ Both return a promise that resolves when the animation is over. By default a dis
 | Option | Default | Description |
 | --- | --- | --- |
 | `effect` | `'dust'` | `'dust'`, `'burn'`, `'melt'` or `'fade'` |
-| `duration` | 1.6 s | 2.2 s for burn, 1.8 s for melt, 1 s for fade |
+| `duration` | 1.6 s | 2.2 s for burn, 1.8 s for melt, 1 s for fade. `0` hides or shows the element at once |
 | `direction` | per effect | Which way the edge travels: `'right'`, `'left'`, `'up'`, `'down'` or `'none'` (blotches everywhere at once). Dust defaults to `'right'`, burn to `'up'`, fade to `'none'` |
 | `noise` | `0.4` | How ragged the edge is, from 0 (a straight line) to 1 (blotches) |
 | `scale` | `36` | Size of the blotches in px |

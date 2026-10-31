@@ -10,7 +10,7 @@ export interface DissolveOptions {
    * - 'fade': a soft, noisy fade
    */
   effect?: DissolveEffect;
-  /** Seconds. Default 1.6 (burn 2.2, melt 1.8, fade 1). */
+  /** Seconds. Default 1.6 (burn 2.2, melt 1.8, fade 1). 0 hides or shows the element at once. */
   duration?: number;
   /** Which way the edge travels. Default 'right' for dust, 'up' for burn, 'none' for fade. */
   direction?: DissolveDirection;
@@ -45,7 +45,7 @@ export function resolveOptions(options: DissolveOptions = {}): ResolvedDissolveO
   const effect = options.effect && options.effect in durations ? options.effect : 'dust';
   return {
     effect,
-    duration: Math.max(0.05, options.duration ?? durations[effect]),
+    duration: Math.max(0, options.duration ?? durations[effect]),
     direction: options.direction ?? directions[effect],
     noise: Math.min(1, Math.max(0, options.noise ?? 0.4)),
     scale: Math.max(4, options.scale ?? 36),

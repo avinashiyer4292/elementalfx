@@ -155,6 +155,13 @@ async function animate(target: Target, options: DissolveOptions, reverse: boolea
   running.get(element)?.();
   const o = resolveOptions(options);
 
+  if (o.duration === 0) {
+    // At once, with no frame in between, e.g. to start out hidden.
+    if (reverse) unhide(element);
+    else finishVanish(element, o);
+    return;
+  }
+
   if (o.respectReducedMotion && prefersReducedMotion()) {
     // A plain, quick fade instead of anything that moves.
     if (reverse) unhide(element);
