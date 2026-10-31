@@ -57,6 +57,30 @@ test.describe('weather', () => {
     expect(after).toBeLessThan(stats.settledSnow * 0.5);
   });
 
+  test('settleSpeed makes snow pile up faster', async ({ page }) => {
+    const settled = (speed: number): Promise<number> =>
+      page.evaluate(async (settleSpeed) => {
+        const w = window as unknown as Win;
+        const wx = w.ElementalFX.weather.createWeather(document.body, {
+          effects: 'snow',
+          snow: { density: 4 },
+          settleOn: '.card',
+          maxSnowDepth: 60,
+          settleSpeed,
+          seed: 5,
+        });
+        await wx.ready;
+        await new Promise((resolve) => setTimeout(resolve, 2500));
+        const snow = wx.stats().settledSnow;
+        wx.destroy();
+        return snow;
+      }, speed);
+    const normal = await settled(1);
+    const fast = await settled(6);
+    expect(normal).toBeGreaterThan(0);
+    expect(fast).toBeGreaterThan(normal * 2.5);
+  });
+
   test('rain splashes and makes drop targets ripple', async ({ page }) => {
     await page.evaluate(() => {
       const w = window as unknown as Win;
