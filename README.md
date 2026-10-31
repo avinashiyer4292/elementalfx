@@ -2,6 +2,8 @@
 
 Natural-element effects for the web: water, air, fire and earth. Each effect is a small, dependency-free package that works with plain HTML, any framework, or a `<script>` tag.
 
+See them all live on the demo site: https://avinashiyer4292.github.io/elementalfx/
+
 | Package | What it does | Status |
 | --- | --- | --- |
 | [`@elementalfx/ripples`](packages/ripples) | WebGL water ripples on images, video and CSS backgrounds; a modern replacement for jquery.ripples | ready |
@@ -68,8 +70,13 @@ pnpm typecheck
 pnpm test           # browser tests (run `pnpm exec playwright install chromium` once)
 pnpm test:node      # headless tests: SSR-safe imports, physics engine
 pnpm size           # gzipped size budgets
-node scripts/serve.mjs   # static server on http://localhost:4173 for the demos
+pnpm site           # build the demo site into _site/
+node scripts/serve.mjs   # static server on http://localhost:4173; the site is at /_site/
 ```
+
+## Demo site
+
+The site lives in `site/`. Every push to `main` builds it and publishes it to GitHub Pages (`.github/workflows/pages.yml`). It needs one setting, once: Settings → Pages → Build and deployment → Source: **GitHub Actions**.
 
 ## Releasing
 
