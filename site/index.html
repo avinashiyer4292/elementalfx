@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>elementalfx: water, air, fire and earth for the web</title>
+  <meta name="description" content="Five small effect packages for the web: ripples, weather, fluid, gravity and dissolve. Plain HTML, any framework, or a script tag.">
+  <meta property="og:title" content="elementalfx">
+  <meta property="og:description" content="Ripples, weather, fluid, gravity and dissolve effects for any web page.">
+  <meta name="theme-color" content="#0e1a24">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&display=swap">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="skip" href="#ripples">Skip to the effects</a>
+
+  <header class="hero" id="hero">
+    <nav class="nav" aria-label="Effects">
+      <a href="#ripples">Ripples</a>
+      <a href="#weather">Weather</a>
+      <a href="#fluid">Fluid</a>
+      <a href="#gravity">Gravity</a>
+      <a href="#dissolve">Dissolve</a>
+      <a href="#react">React</a>
+      <a href="https://github.com/avinashiyer4292/elementalfx">GitHub</a>
+    </nav>
+    <h1 class="wordmark" id="wordmark" aria-label="elementalfx"><span aria-hidden="true">ELEMENTALFX</span></h1>
+    <div class="hero-copy">
+      <p class="lead">Water, air, fire and earth for the web. Five small effect packages that work with plain HTML, any framework, or a script tag.</p>
+      <div class="install">
+        <code id="install-command">npm install @elementalfx/weather</code>
+        <button type="button" class="copy" data-copy="#install-command">Copy</button>
+      </div>
+      <p class="hint">The snow is the weather package, settling on the letters. Move the pointer to push the wind.</p>
+    </div>
+  </header>
+
+  <p class="reduced" id="reduced" hidden>Your system asks for reduced motion, so the effects stay still. Turn that setting off to see them move.</p>
+
+  <main>
+    <section class="plate" id="ripples" style="--hue: #4fb3bf">
+      <div class="plate-head">
+        <h2>Ripples</h2>
+        <p>Water ripples on any image, video or CSS background, rendered with WebGL.</p>
+      </div>
+      <div class="stage stage-ripples" id="ripples-demo"></div>
+      <div class="plate-body">
+        <div class="notes">
+          <p>Click or drag across the water.</p>
+          <div class="choices" role="group" aria-label="Ripples preset" data-group="ripples">
+            <button type="button" data-value="pond" aria-pressed="true">Pond</button>
+            <button type="button" data-value="rain" aria-pressed="false">Rain</button>
+            <button type="button" data-value="subtle" aria-pressed="false">Subtle</button>
+          </div>
+          <label class="toggle"><input type="checkbox" id="ripples-sky"> Let real rain fall on it</label>
+          <p class="meta"><code>@elementalfx/ripples</code>, about 10 KB gzipped</p>
+        </div>
+        <pre class="code" id="ripples-code"></pre>
+      </div>
+    </section>
+
+    <section class="plate" id="weather" style="--hue: #c9d6e2">
+      <div class="plate-head">
+        <h2>Weather</h2>
+        <p>Snow, rain, fog, lightning, leaves and embers on one shared wind. Snow settles on the elements you choose and melts away when it stops.</p>
+      </div>
+      <div class="stage stage-weather" id="weather-demo">
+        <div class="town" aria-hidden="true">
+          <div class="roof" style="--x: 4%; --w: 15%; --h: 34%"></div>
+          <div class="roof" style="--x: 21%; --w: 11%; --h: 52%"></div>
+          <div class="roof" style="--x: 34%; --w: 18%; --h: 28%"></div>
+          <div class="roof" style="--x: 55%; --w: 9%; --h: 61%"></div>
+          <div class="roof" style="--x: 66%; --w: 16%; --h: 40%"></div>
+          <div class="roof" style="--x: 85%; --w: 12%; --h: 30%"></div>
+        </div>
+      </div>
+      <div class="plate-body">
+        <div class="notes">
+          <p>Snow piles up on the rooftops. Move the pointer to push the wind around.</p>
+          <div class="choices" role="group" aria-label="Weather preset" data-group="weather">
+            <button type="button" data-value="snow" aria-pressed="true">Snow</button>
+            <button type="button" data-value="blizzard" aria-pressed="false">Blizzard</button>
+            <button type="button" data-value="rain" aria-pressed="false">Rain</button>
+            <button type="button" data-value="storm" aria-pressed="false">Storm</button>
+            <button type="button" data-value="autumn" aria-pressed="false">Autumn</button>
+            <button type="button" data-value="fireplace" aria-pressed="false">Fireplace</button>
+            <button type="button" data-value="mist" aria-pressed="false">Mist</button>
+          </div>
+          <p class="meta"><code>@elementalfx/weather</code>, about 14 KB gzipped</p>
+        </div>
+        <pre class="code" id="weather-code"></pre>
+      </div>
+    </section>
+
+    <section class="plate" id="fluid" style="--hue: #b48ce0">
+      <div class="plate-head">
+        <h2>Fluid</h2>
+        <p>A real fluid simulation on the GPU: a living background behind your content, or a smoke trail that follows the cursor.</p>
+      </div>
+      <div class="stage stage-fluid" id="fluid-demo">
+        <p class="stage-label">Drag through it</p>
+      </div>
+      <div class="plate-body">
+        <div class="notes">
+          <p>It keeps flowing on its own. Your pointer stirs it.</p>
+          <div class="choices" role="group" aria-label="Fluid preset" data-group="fluid">
+            <button type="button" data-value="ink" aria-pressed="true">Ink</button>
+            <button type="button" data-value="smoke" aria-pressed="false">Smoke</button>
+            <button type="button" data-value="neon" aria-pressed="false">Neon</button>
+          </div>
+          <button type="button" class="action" id="fluid-splash">Splash</button>
+          <p class="meta"><code>@elementalfx/fluid</code>, about 9 KB gzipped</p>
+        </div>
+        <pre class="code" id="fluid-code"></pre>
+      </div>
+    </section>
+
+    <section class="plate" id="gravity" style="--hue: #c4a35a">
+      <div class="plate-head">
+        <h2>Gravity</h2>
+        <p>Elements come loose, fall and pile up. Grab them and throw them around, then fly everything back into place. It has its own small physics engine.</p>
+      </div>
+      <div class="stage stage-gravity" id="gravity-demo">
+        <div class="mock">
+          <div class="mock-bar">
+            <span class="mock-logo">Acme Outfitters</span>
+            <a href="#gravity" tabindex="-1">Shop</a>
+            <a href="#gravity" tabindex="-1">Journal</a>
+            <a href="#gravity" tabindex="-1">About</a>
+          </div>
+          <h3>Gear for the long way round</h3>
+          <p>Packs, shells and stoves tested on real trips, and repaired for free when they wear out.</p>
+          <div class="mock-row">
+            <button type="button" tabindex="-1">Shop the sale</button>
+            <button type="button" tabindex="-1" class="ghost">Read the journal</button>
+          </div>
+          <div class="mock-tags">
+            <span>Waterproof</span><span>Ultralight</span><span>Repairable</span>
+            <span class="mock-badge" aria-hidden="true"></span>
+          </div>
+        </div>
+      </div>
+      <div class="plate-body">
+        <div class="notes">
+          <p>Drop the page, then drag the pieces. Escape puts it all back.</p>
+          <div class="choices" role="group" aria-label="Gravity">
+            <button type="button" class="action" id="gravity-drop">Drop</button>
+            <button type="button" class="action" id="gravity-explode">Explode</button>
+            <button type="button" class="action" id="gravity-restore">Restore</button>
+          </div>
+          <p>Or type <kbd>↑</kbd> <kbd>↑</kbd> <kbd>↓</kbd> <kbd>↓</kbd> <kbd>←</kbd> <kbd>→</kbd> <kbd>←</kbd> <kbd>→</kbd> <kbd>B</kbd> <kbd>A</kbd> anywhere to drop this whole page.</p>
+          <p class="meta"><code>@elementalfx/gravity</code>, about 12 KB gzipped with the engine</p>
+        </div>
+        <pre class="code" id="gravity-code"></pre>
+      </div>
+    </section>
+
+    <section class="plate" id="dissolve" style="--hue: #ff8a3d">
+      <div class="plate-head">
+        <h2>Dissolve</h2>
+        <p>Make any element crumble into dust, burn away, melt or fade, then bring it back the same way. The real element stays on the page the whole time; an SVG filter hides it piece by piece.</p>
+      </div>
+      <div class="stage stage-dissolve" id="dissolve-demo">
+        <button type="button" class="specimen" data-effect="dust"><span class="art art-dust" aria-hidden="true"></span><strong>Dust</strong><span>Crumbles and blows away</span></button>
+        <button type="button" class="specimen" data-effect="burn"><span class="art art-burn" aria-hidden="true"></span><strong>Burn</strong><span>A glowing edge eats through it</span></button>
+        <button type="button" class="specimen" data-effect="melt"><span class="art art-melt" aria-hidden="true"></span><strong>Melt</strong><span>Drips down and fades</span></button>
+        <button type="button" class="specimen" data-effect="fade"><span class="art art-fade" aria-hidden="true"></span><strong>Fade</strong><span>A soft, blotchy fade</span></button>
+      </div>
+      <div class="plate-body">
+        <div class="notes">
+          <p>Click a card. It comes back on its own a moment later.</p>
+          <p class="meta"><code>@elementalfx/dissolve</code>, about 7 KB gzipped</p>
+        </div>
+        <pre class="code" id="dissolve-code"></pre>
+      </div>
+    </section>
+
+    <section class="plate plate-react" id="react" style="--hue: #8fd0f0">
+      <div class="plate-head">
+        <h2>React</h2>
+        <p>Components and hooks for every effect. They render on the server, start after mount, and update the running effect when options change.</p>
+      </div>
+      <div class="plate-body">
+        <div class="notes">
+          <p>Install the React package with the effects you use. Each effect has its own entry point.</p>
+          <div class="install">
+            <code id="react-install">npm install @elementalfx/react @elementalfx/dissolve</code>
+            <button type="button" class="copy" data-copy="#react-install">Copy</button>
+          </div>
+        </div>
+        <pre class="code" id="react-code"></pre>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>Every effect respects reduced motion, stops drawing when nothing is happening, and cleans up after itself.</p>
+    <p><a href="https://github.com/avinashiyer4292/elementalfx">Source on GitHub</a>. MIT License.</p>
+  </footer>
+
+  <script src="lib/ripples.global.js"></script>
+  <script src="lib/weather.global.js"></script>
+  <script src="lib/fluid.global.js"></script>
+  <script src="lib/gravity.global.js"></script>
+  <script src="lib/dissolve.global.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

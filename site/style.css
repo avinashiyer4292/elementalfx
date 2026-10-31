@@ -1,0 +1,570 @@
+:root {
+  --night: #0e1a24;
+  --dusk: #172836;
+  --deep: #0a131b;
+  --snow: #eef3f6;
+  --frost: #9fb6c6;
+  --ice: #8fd0f0;
+  --line: rgba(238, 243, 246, 0.14);
+  --display: 'Big Shoulders Display', 'Arial Narrow', 'Helvetica Neue', Arial, sans-serif;
+  --text: 'Newsreader', Georgia, 'Times New Roman', serif;
+  --mono: ui-monospace, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+  --gutter: max(20px, env(safe-area-inset-left, 0px));
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  margin: 0;
+  background: var(--night);
+  color: var(--snow);
+  font: 400 1.125rem/1.6 var(--text);
+  font-optical-sizing: auto;
+}
+
+a {
+  color: var(--ice);
+  text-underline-offset: 0.18em;
+}
+
+:focus-visible {
+  outline: 2px solid var(--ice);
+  outline-offset: 3px;
+}
+
+.skip {
+  position: absolute;
+  left: var(--gutter);
+  top: -100px;
+  z-index: 10;
+  background: var(--snow);
+  color: var(--night);
+  padding: 8px 14px;
+  border-radius: 6px;
+}
+
+.skip:focus {
+  top: 12px;
+}
+
+/* Hero: the wordmark is the stage for the snow. */
+
+.hero {
+  position: relative;
+  min-height: min(100vh, 920px);
+  display: flex;
+  flex-direction: column;
+  padding: 28px var(--gutter) 72px;
+  background:
+    radial-gradient(120% 70% at 50% 0%, #1d3346 0%, rgba(29, 51, 70, 0) 70%),
+    var(--night);
+  overflow: hidden;
+}
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 22px;
+  font: 700 1.05rem/1 var(--display);
+  letter-spacing: 0.03em;
+}
+
+.nav a {
+  color: var(--frost);
+  text-decoration: none;
+  padding: 6px 0;
+}
+
+.nav a:hover {
+  color: var(--snow);
+}
+
+.wordmark {
+  margin: auto 0 0;
+  padding-top: 18vh;
+  font: 900 clamp(2.8rem, 15.5vw, 16rem) / 0.82 var(--display);
+  letter-spacing: 0.005em;
+  color: var(--snow);
+  white-space: nowrap;
+}
+
+.wordmark .letter {
+  display: inline-block;
+  /* Box tops sit on the cap height, so snow lands on the letters, not above them. */
+  text-box: trim-both cap alphabetic;
+}
+
+.hero-copy {
+  min-width: 0;
+  max-width: 40rem;
+  margin-top: 36px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 18px;
+}
+
+.lead {
+  margin: 0;
+  font-size: clamp(1.25rem, 2.4vw, 1.6rem);
+  line-height: 1.45;
+}
+
+.hint {
+  margin: 0;
+  color: var(--frost);
+  font-style: italic;
+  font-size: 1rem;
+}
+
+.install {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 100%;
+  background: var(--deep);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 8px 8px 8px 16px;
+  justify-self: start;
+}
+
+.install code {
+  min-width: 0;
+  font: 0.95rem/1.4 var(--mono);
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.copy,
+.choices button,
+.action {
+  font: 700 1.05rem/1 var(--display);
+  letter-spacing: 0.03em;
+  color: var(--snow);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 9px 16px;
+  cursor: pointer;
+}
+
+.copy:hover,
+.choices button:hover,
+.action:hover {
+  border-color: var(--frost);
+}
+
+.choices button[aria-pressed='true'] {
+  background: var(--hue, var(--ice));
+  border-color: var(--hue, var(--ice));
+  color: var(--night);
+}
+
+.reduced {
+  margin: 0;
+  padding: 14px var(--gutter);
+  background: var(--dusk);
+  color: var(--snow);
+  border-block: 1px solid var(--line);
+}
+
+/* Plates: one per effect. */
+
+main {
+  padding: 0 var(--gutter);
+}
+
+.plate {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding-block: 96px 24px;
+}
+
+.plate-head {
+  max-width: 44rem;
+  margin-bottom: 28px;
+}
+
+.plate-head h2 {
+  margin: 0 0 10px;
+  font: 900 clamp(2.8rem, 6vw, 4.5rem) / 0.95 var(--display);
+  letter-spacing: 0.01em;
+  text-wrap: balance;
+}
+
+.plate-head h2::before {
+  content: '';
+  display: inline-block;
+  width: 0.32em;
+  height: 0.32em;
+  margin-right: 0.28em;
+  vertical-align: 0.12em;
+  border-radius: 2px;
+  background: var(--hue);
+}
+
+.plate-head p {
+  margin: 0;
+  color: var(--frost);
+  font-size: 1.2rem;
+}
+
+.stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 8;
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--dusk);
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+
+.plate-body {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: 32px;
+  margin-top: 28px;
+}
+
+.notes {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+  align-content: start;
+}
+
+.notes p {
+  margin: 0;
+}
+
+.choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.toggle input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--hue);
+}
+
+.meta {
+  color: var(--frost);
+  font-size: 1rem;
+}
+
+.meta code {
+  font: 0.9rem var(--mono);
+  color: var(--snow);
+}
+
+kbd {
+  display: inline-block;
+  min-width: 1.6em;
+  padding: 1px 6px;
+  border: 1px solid var(--line);
+  border-bottom-width: 2px;
+  border-radius: 5px;
+  font: 0.85rem/1.4 var(--mono);
+  text-align: center;
+  color: var(--snow);
+}
+
+.code {
+  margin: 0;
+  min-width: 0;
+  background: var(--deep);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 18px 20px;
+  font: 0.9rem/1.65 var(--mono);
+  color: #cfdfe9;
+  overflow-x: auto;
+  white-space: pre;
+}
+
+.code .s {
+  color: #a8dcb4;
+}
+
+.code .c {
+  color: var(--frost);
+  font-style: italic;
+}
+
+.code .k {
+  color: var(--ice);
+}
+
+/* Ripples: a painted lake (see app.js). */
+
+.stage-ripples {
+  background-color: #1b3346;
+  background-size: cover;
+  background-position: center;
+  cursor: crosshair;
+}
+
+/* Weather: a night town for the snow to settle on. */
+
+.stage-weather {
+  background: linear-gradient(#0b1621 0%, #16283a 55%, #1f3850 100%);
+}
+
+.town {
+  position: absolute;
+  inset: 0;
+}
+
+.roof {
+  position: absolute;
+  left: var(--x);
+  width: var(--w);
+  height: var(--h);
+  bottom: 0;
+  background:
+    repeating-linear-gradient(90deg, transparent 0 18px, rgba(255, 214, 120, 0.85) 18px 26px, transparent 26px 44px) 10px 22px / calc(100% - 20px) 10px no-repeat,
+    repeating-linear-gradient(90deg, transparent 0 30px, rgba(255, 214, 120, 0.6) 30px 38px, transparent 38px 52px) 14px 56px / calc(100% - 28px) 10px no-repeat,
+    #08111a;
+}
+
+/* Fluid. */
+
+.stage-fluid {
+  background: #070d13;
+  display: grid;
+  place-items: center;
+}
+
+.stage-label {
+  position: relative;
+  margin: 0;
+  font: 900 clamp(2rem, 6vw, 4.5rem) / 1 var(--display);
+  color: rgba(238, 243, 246, 0.85);
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Gravity: a small made-up shop page to knock over. */
+
+.stage-gravity {
+  background: #dfe6ec;
+  color: #1c2731;
+}
+
+.mock {
+  padding: clamp(18px, 4vw, 40px);
+  display: grid;
+  gap: 18px;
+  align-content: start;
+  max-width: 720px;
+  font-size: 1.05rem;
+}
+
+.mock-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  align-items: baseline;
+  font: 700 1.1rem/1 var(--display);
+}
+
+.mock-logo {
+  margin-right: auto;
+  font-size: 1.35rem;
+}
+
+.mock-bar a {
+  color: #34505f;
+  text-decoration: none;
+}
+
+.mock h3 {
+  margin: 0;
+  font: 900 clamp(1.8rem, 4.4vw, 3.2rem) / 1 var(--display);
+}
+
+.mock p {
+  margin: 0;
+  max-width: 34rem;
+  color: #3d4f5c;
+}
+
+.mock-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.mock-row button {
+  font: 700 1.05rem/1 var(--display);
+  letter-spacing: 0.03em;
+  padding: 11px 18px;
+  border-radius: 8px;
+  border: 2px solid #8a6d2b;
+  background: #8a6d2b;
+  color: #fff;
+}
+
+.mock-row button.ghost {
+  background: transparent;
+  color: #6b5320;
+}
+
+.mock-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.mock-tags span {
+  font-size: 0.9rem;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: #c9d5de;
+}
+
+.mock-tags .mock-badge {
+  width: 46px;
+  height: 46px;
+  padding: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #f1d58f, #c4a35a 60%, #8a6d2b);
+}
+
+/* Dissolve: four specimens. */
+
+.stage-dissolve {
+  aspect-ratio: auto;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(12px, 2vw, 24px);
+  padding: clamp(16px, 3vw, 32px);
+  background: #101d28;
+}
+
+.specimen {
+  display: grid;
+  gap: 4px;
+  align-content: start;
+  text-align: left;
+  padding: 0 0 16px;
+  border: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #e8eef3;
+  color: #1c2731;
+  font: inherit;
+  cursor: pointer;
+}
+
+.specimen strong {
+  padding: 12px 16px 0;
+  font: 900 1.6rem/1 var(--display);
+}
+
+.specimen span:last-child {
+  padding: 0 16px;
+  font-size: 0.95rem;
+  color: #46596a;
+}
+
+.art {
+  display: block;
+  aspect-ratio: 4 / 3;
+}
+
+.art-dust {
+  background:
+    radial-gradient(circle at 70% 30%, #f4e3b1 0 12%, transparent 13%),
+    linear-gradient(160deg, #7d6aa8, #e48f6b 60%, #f6c58c);
+}
+
+.art-burn {
+  background:
+    linear-gradient(transparent 62%, #2b3a2f 62%),
+    radial-gradient(circle at 30% 85%, #ffd27a, transparent 40%),
+    linear-gradient(#b7d3e3, #f1e7c8);
+}
+
+.art-melt {
+  background:
+    radial-gradient(ellipse at 50% 120%, #2f6f86 0 45%, transparent 46%),
+    linear-gradient(#e9f3f7, #9cc7d8);
+}
+
+.art-fade {
+  background:
+    radial-gradient(circle at 30% 40%, #9fc2a8 0 18%, transparent 19%),
+    radial-gradient(circle at 68% 62%, #4f7f68 0 24%, transparent 25%),
+    linear-gradient(135deg, #e2ecdf, #b9d0bd);
+}
+
+.plate-react .plate-body {
+  margin-top: 0;
+}
+
+.footer {
+  max-width: 1120px;
+  margin: 72px auto 0;
+  padding: 32px var(--gutter) 56px;
+  border-top: 1px solid var(--line);
+  color: var(--frost);
+  display: grid;
+  gap: 6px;
+}
+
+.footer p {
+  margin: 0;
+}
+
+@media (max-width: 800px) {
+  .plate {
+    padding-block: 72px 16px;
+  }
+
+  .plate-body {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+
+  .stage {
+    aspect-ratio: 4 / 3;
+  }
+
+  .stage-gravity {
+    aspect-ratio: 4 / 5;
+  }
+
+  .stage-dissolve {
+    aspect-ratio: auto;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .wordmark {
+    padding-top: 22vh;
+  }
+}
