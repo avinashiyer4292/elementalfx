@@ -32,6 +32,12 @@ importers:
 
   packages/core: {}
 
+  packages/dissolve:
+    dependencies:
+      '@elementalfx/core':
+        specifier: workspace:^
+        version: link:../core
+
   packages/fluid:
     dependencies:
       '@elementalfx/core':
