@@ -18,6 +18,10 @@
       "types": "./dist/weather.d.ts",
       "import": "./dist/weather.js"
     },
+    "./fluid": {
+      "types": "./dist/fluid.d.ts",
+      "import": "./dist/fluid.js"
+    },
     "./package.json": "./package.json"
   },
   "main": "./dist/index.js",
