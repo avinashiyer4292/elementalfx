@@ -104,6 +104,8 @@ a {
 
 .wordmark .letter {
   display: inline-block;
+  /* A sliver of space so each letter wears its own cap of snow. */
+  margin-right: 0.035em;
   /* Box tops sit on the cap height, so snow lands on the letters, not above them. */
   text-box: trim-both cap alphabetic;
 }

@@ -55,9 +55,11 @@
   document.fonts.ready.then(() => {
     weather.createWeather('#hero', {
       preset: 'snow',
-      snow: { density: 0.9 },
+      snow: { density: 1.2 },
       settleOn: '#wordmark .letter',
-      maxSnowDepth: 16,
+      // Pile up in seconds, not minutes, so the letters wear a cap soon after the page opens.
+      settleSpeed: 10,
+      maxSnowDepth: 18,
     });
   });
 
